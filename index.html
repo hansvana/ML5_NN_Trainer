@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/uikit.min.css" />
+  <link rel="stylesheet" href="css/custom.css">
+  <script src="https://kit.fontawesome.com/4dfc2df6a6.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="js/uikit.min.js"></script>
+  <script src="js/uikit-icons.min.js"></script>
+  <title>ML5_NN_Trainer</title>
+</head>
+
+<body>
+  <div>
+    <!-- NAVBAR -->
+    <div class="uk-navbar-container uk-sticky uk-sticky-fixed uk-sticky-below cmd-navbar" uk-sticky="media: 960"
+      uk-navbar>
+      <div class="uk-navbar-left">
+        <div class="uk-navbar-item">
+          <h1 class="uk-heading-medium">
+            <img src="img/logo-icon.svg">
+            ML5 Neural Network Trainer</h1>
+        </div>
+      </div>
+      <div class="uk-navbar-right">
+        <div class="uk-navbar-item uk-visible@m">Powered by</div>
+        <ul class="uk-navbar-nav uk-visible@m">
+          <li><a href="http://ml5js.org">ML5</a></li>
+          <li><a href="http://cmd.camp">cmd.camp</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- /NAVBAR -->
+
+  <!-- SIDEBAR -->
+  <div class="cmd-sidebar uk-visible@m">
+    <ul class="uk-nav uk-nav-default cmd-nav">
+      <li class="uk-nav-header">Steps</li>
+      <li><a href="#step1">Step 1: Select your CSV file</a></li>
+      <li><a href="#step2">Step 2: Select your columns</a></li>
+      <li><a href="#step3">Step 3: Set your training options</a></li>
+      <li><a href="#step4">Step 4: Train your model</a></li>
+      <li><a href="#step5">Step 5: Test the trained model</a></li>
+      <li><a href="#step6">Step 6: Save the trained model</a></li>
+    </ul>
+  </div>
+  <!-- /SIDEBAR -->
+
+  <!-- MAIN -->
+  <div class="cmd-main uk-section uk-section-default">
+    <div class="uk-container uk-container-small uk-position-relative">
+      <ul uk-accordion>
+        <li class="uk-open">
+          <a class="uk-accordion-title">Step 1: Select your CSV file</a>
+          <div class="uk-accordion-content">
+            <p>
+              The values in your file should be separated by comma's. The first line
+              of your file should contain headers.
+            </p>
+            <div class="uk-margin" uk-margin>
+              <div uk-form-custom="target: true">
+                <input type="file" id="fileuploadbtn" />
+                <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file" disabled />
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <a class="uk-accordion-title">Step 2: Select your columns</a>
+          <div class="uk-accordion-content">
+            <p>
+              Select columns to be ignored for training, to be used for input, and
+              to be used as output
+            </p>
+            <div class="uk-margin" uk-margin>
+              <table class="uk-table uk-table-striped uk-table-small">
+                <tbody id="columnlist">
+                  <tr>
+                    <td>...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </li>
+        <li>
+          <a class="uk-accordion-title">Step 3: Set your training options</a>
+          <div class="uk-accordion-content">
+            <p>
+              Set the options to train your model and then press Train. If needed
+              you can make tweaks here then Train again.
+            </p>
+            <form class="uk-form-horizontal">
+              <div class="uk-margin">
+                <div class="uk-form-label">Training type</div>
+                <div class="uk-form-controls uk-form-controls-text">
+                  <label><input class="uk-radio" type="radio" name="traintype" value="classification" checked />
+                    Classification</label><br />
+                  <label><input class="uk-radio" type="radio" name="traintype" value="regression" />
+                    Regression</label>
+                </div>
+              </div>
+
+              <div class="uk-margin">
+                <label class="uk-form-label" for="form-horizontal-text">Epochs</label>
+                <div class="uk-form-controls">
+                  <input class="uk-input uk-form-width-small" id="epochs" type="number" value="32" />
+                </div>
+              </div>
+
+              <div class="uk-margin">
+                <label class="uk-form-label" for="form-horizontal-text">Batch size</label>
+                <div class="uk-form-controls">
+                  <input class="uk-input uk-form-width-small" id="batchsize" type="number" value="12" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </li>
+        <li>
+          <a class="uk-accordion-title">Step 4: Train your model</a>
+          <div class="uk-accordion-content">
+            <p uk-margin>
+              <a class="uk-button uk-button-primary" id="trainBtn">
+                Train
+              </a>
+              <div class="uk-margin" id="traingraph">
+                <canvas id="graphcanvas" width="600" height="300"></canvas>
+              </div>
+            </p>
+          </div>
+        </li>
+        <li>
+          <a class="uk-accordion-title">Step 5: Test the trained model</a>
+          <div class="uk-accordion-content">
+            <div class="uk-margin" uk-margin>
+              <table class="uk-table uk-table-striped uk-table-small">
+                <tbody id="testinputlist">
+                  <tr>
+                    <td>...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="uk-margin" uk-margin>
+              <table class="uk-table uk-table-striped uk-table-small">
+                <thead>
+                  <tr>
+                    <td><strong>Label</strong></td>
+                    <td><strong>Confidence</strong></td>
+                  </tr>
+                </thead>
+                <tbody id="testoutputlist">
+                  <tr>
+                    <td>...</td>
+                    <td>...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </li>
+        <li>
+          <a class="uk-accordion-title">Step 6: Save the trained model</a>
+          <div class="uk-accordion-content">
+            <p>Once you're happy with the results, you can save the data</p>
+
+            <div class="uk-margin" uk-margin>
+              <a class="uk-button uk-button-primary" id="saveBtn">
+                Save
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /MAIN -->
+  <script src="js/graph.js"></script>
+  <script src="js/scripts.js"></script>
+</body>
+
+</html>
