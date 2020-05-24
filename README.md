@@ -1,24 +1,14 @@
 # ml5_nn_trainer_v2
 
-## Project setup
-```
-npm install
-```
+## TODO
+[ ] Enforce naming convention for data (it's sometimes called data and sometimes dataset)
+[ ] Rename 'columns' to 'features'
+[x] Train the model
+[ ] Show summary after training
+[x] Test the trained model
+[ ] Show a chart of predictions in the test step
+[x] Save the trained model
+[ ] Perform better memory management (data gets stored 3 times currently)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## FIXME
+[x] Classification outputs should be cast as strings
