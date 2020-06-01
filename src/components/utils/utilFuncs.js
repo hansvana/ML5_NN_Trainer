@@ -35,3 +35,7 @@ export function humanReadable (input) {
       ? parseInt(input)
       : parseFloat(input).toFixed(2);
 }
+
+export function sanitize (str) {
+  return str.replace(/[&/\\#+()$~%":*?<>{}]/g, '');
+}

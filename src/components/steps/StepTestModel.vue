@@ -69,8 +69,8 @@
                     <td><pre>{{humanReadable(prediction.result[0].value)}}</pre></td>
                   </template>
                   <template
-                    v-for="input in prediction.predictInput"                  >
-                    <td :key="'predI' + n + input"><pre>{{humanReadable(input)}}</pre></td>
+                    v-for="(input, o) in prediction.predictInput"                  >
+                    <td :key="'predI' + n + '-' + o "><pre>{{humanReadable(input)}}</pre></td>
                   </template>
                 </tr>
               </tbody>

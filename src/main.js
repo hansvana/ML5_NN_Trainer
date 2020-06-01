@@ -59,7 +59,7 @@ new Vue({
       const results = [];
 
       for (let i = 0; i < amount; i++)
-        this.nn.predict(inputs, function (error, result) {
+        this.nn.predict(inputs, (error, result) => {
           if (error)
             return this.errors.push(error.message);
           results.push(result);

@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import * as utils from '../utils/utilFuncs';
+
 export default {
   name: 'StepSelectFile',
   components: {},
@@ -72,7 +74,7 @@ export default {
     },
   },
   data: () => ({
-    fileName: 'data.csv', // TODO: actually show filename
+    fileName: 'data.csv',
   }),
   methods: {
     fileSelected (file) {
@@ -100,8 +102,17 @@ export default {
 
             const cells = [];
             lines.forEach((line, n) => {
+              line = utils.sanitize(line);
               const lineArr = line.split(',').map(val => val.trim());
+              console.log(lineArr);
 
+              // check if first line has no unnamed features
+              if (n === 0)
+                lineArr.forEach((feature, i) => {
+                  if (!feature) lineArr[i] = 'unnamed-' + i;
+                });
+
+              // check if line has at least 2 features
               if (lineArr.length < 2) {
                 if (!lineArr || lineArr[0] === '') return;
                 return this.$emit(
@@ -113,6 +124,7 @@ export default {
                 );
               }
 
+              // check if line has same amount of features as first line
               if (n > 0 && lineArr.length !== cells[0].length)
                 return this.$emit(
                   'error',

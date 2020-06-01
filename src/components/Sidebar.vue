@@ -15,10 +15,10 @@
 
 <script>
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
 
   data: () => ({
-  })
+  }),
 };
 </script>
 

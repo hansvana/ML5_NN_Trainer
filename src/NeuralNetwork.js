@@ -1,7 +1,7 @@
 /**
  * This class wraps around ML5.js, which itself abstracts TensorFlow.js
  */
-import ml5 from '../lib/ml5.min';
+import ml5 from 'ml5';
 import * as _ from './components/utils/utilFuncs';
 
 // Set up defaults
@@ -151,14 +151,45 @@ export default class NeuralNetwork {
 
   predict (inputs, callback) {
     const predictInput = {};
+
+    // Build a testing set from user input and/or random values
+    // Iterate through each input feature
     Object.keys(this.getInputFeatures()).forEach(key => {
-      predictInput[key] =
-        inputs[key].value ||
-        _.randomBetween(
-          this.getInputFeatures()[key].min,
-          this.getInputFeatures()[key].max,
-        );
+      if (this.getInputFeatures()[key].dtype === 'string') {
+        // Handle strings
+        const legend = Object.keys(this.getInputFeatures()[key].legend);
+        console.log(legend);
+        predictInput[key] =
+          inputs[key].value ||
+          legend[Math.floor(Math.random() * legend.length)]; // random value from the legend
+      } else if (this.getInputFeatures()[key].dtype === 'number') {
+        // Handle binary
+        // binary is not stored as a dtype, so we have to do some deeper checks
+        // So we check in min is 0, max is 1, and no values are something other than 0 or 1
+        if (
+          this.getInputFeatures()[key].min === 0 &&
+          this.getInputFeatures()[key].max === 1 &&
+          !(this.getData().some(d => {
+            return d.xs[key] !== 0 && d.xs[key] !== 1;
+          }))
+        )
+          predictInput[key] = Math.floor(Math.random() * 2); // random 0 or 1
+        else
+        // Handle numbers
+          predictInput[key] =
+            parseFloat(inputs[key].value) ||
+            _.randomBetween(
+              this.getInputFeatures()[key].min,
+              this.getInputFeatures()[key].max,
+            ); // random value between min and max
+      } else {
+        callback(new Error(`
+          don't know how to handle ${this.getInputFeatures()[key].dtype} ${key}`,
+        ));
+      }
     });
+
+    console.log(predictInput);
 
     if (this.modelOptions.task === 'classification')
       this.nn.classify(predictInput, (error, result) => {

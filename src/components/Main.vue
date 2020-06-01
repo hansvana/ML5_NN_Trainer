@@ -116,6 +116,9 @@ export default {
             return { name: cell, index: n, usage: "input" };
           });
 
+        // default last feature to output
+        this.dataObj.columns[this.dataObj.columns.length - 1].usage = "output";
+
         // store data
         for (let i = 1; i < data.length; i++) {
           let obj = {};
