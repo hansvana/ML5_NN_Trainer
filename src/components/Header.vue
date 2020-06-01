@@ -10,7 +10,7 @@
       ML5.js Neural Network Trainer
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn text :disabled=true>Alpha 0.2</v-btn>
+    <v-btn text :disabled=true>Alpha {{ version }}</v-btn>
     <v-spacer></v-spacer>
     <v-btn text :disabled=true>Powered by</v-btn>
     <v-btn text>
@@ -27,6 +27,11 @@ export default {
   name: 'Header',
 
   data: () => ({}),
+  computed: {
+    version: function () {
+      return process.env.VUE_APP_VERSION.replace(/"/g, '');
+    },
+  },
 };
 </script>
 
