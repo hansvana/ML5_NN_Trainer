@@ -37,5 +37,5 @@ export function humanReadable (input) {
 }
 
 export function sanitize (str) {
-  return str.replace(/[&/\\#+()$~%":*?<>{}]/g, '');
+  return str.replace(/[&/\\#+()$~%":*?<>{}=]/g, '');
 }

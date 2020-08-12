@@ -62,7 +62,7 @@ export default {
     status: function () {
       const _status = this.$root.status;
       if (_status) console.log(
-        `%c Status update: %c ${_status}`,
+        `%c Status update: %c ${_status} `,
         'background:#1976D2; padding: 1px; border-radius: 3px 0 0 3px; color: #fff',
         'background:#FFFFFF; padding: 1px; border-radius: 0 3px 3px 0; color: #000',
       );

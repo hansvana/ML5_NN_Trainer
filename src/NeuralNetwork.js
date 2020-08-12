@@ -60,10 +60,14 @@ export default class NeuralNetwork {
       try {
         // Create the model
         this.nn = ml5.neuralNetwork(this.modelOptions);
+        // Automatically set the datatype (string / number) for each column
+        columns = this.detectColumnsDatatype(data, columns);
         // Add data to the model
         this.addData(data, columns, options.task);
         // Normalize data
         this.nn.normalizeData();
+        console.log(this.nn.data);
+        console.log('done normalizing');
       } catch (err) {
         return reject(err, null);
       }
@@ -94,7 +98,10 @@ export default class NeuralNetwork {
         // Perform data conversion to number if possible
         // Note: For classification tasks, the output feature should remain a string
         // https://github.com/ml5js/ml5-library/issues/973
-        if (task !== 'classification' || col.usage !== 'output')
+        if (
+          col.datatype === 'number' &&
+          !(task === 'classification' && col.usage === 'output')
+        )
           value = isNaN(value) ? value : parseFloat(value);
 
         if (col.usage === 'input')
@@ -106,6 +113,20 @@ export default class NeuralNetwork {
       // add objects to data
       this.nn.addData(input, output);
     });
+  }
+
+  /**
+   * Iterates through all data, if isNaN is true on any value it assumes that feature has
+   * a datatype of "string", else "number"
+   * @param dataset 2D array of data
+   * @param columns array of features
+   * @returns columns with property dataset set to "string" or "number"
+   */
+  detectColumnsDatatype (data, columns) {
+    columns.forEach(column => {
+      column.datatype = data.some(row => isNaN(row[column.name])) ? 'string' : 'number';
+    });
+    return columns;
   }
 
   /*

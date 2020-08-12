@@ -92,7 +92,9 @@ export default {
         reader.onload = evt => {
           // Split data into 2d array
           try {
-            const lines = evt.target.result.split('\n');
+            // get text content
+            const lines = evt.target.result.split(/\r\n|\r|\n/);
+
             // check: are there at least 2 lines?
             if (lines.length < 2)
               return this.$emit(
@@ -104,7 +106,7 @@ export default {
             lines.forEach((line, n) => {
               line = utils.sanitize(line);
               const lineArr = line.split(',').map(val => val.trim());
-              console.log(lineArr);
+              // console.log(lineArr);
 
               // check if first line has no unnamed features
               if (n === 0)

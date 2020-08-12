@@ -27,8 +27,23 @@ new Vue({
       this.nn = new NeuralNetwork();
     },
     addError (err) {
-      console.error(err.message);
-      this.errors.push(err.message);
+      console.error(err);
+
+      // Provide a better description for some error messages
+      // TODO: Find a better place to do this
+      switch (err.message) {
+        case 'Error in oneHot: depth must be >=2, but it is 1':
+          this.errors.push(
+            `There is a problem with your data: one of the features you've selected
+            only has one distinct value. <br> 
+            Look for features where all the values are the same. Disable this feature 
+            or provide different values.
+            `,
+          );
+          break;
+        default:
+          this.errors.push(err.message);
+      }
     },
     clearErrors () {
       this.errors = [];
