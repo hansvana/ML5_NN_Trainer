@@ -5,3 +5,6 @@
 - npm install
 - Download ml5.min.js from [ml5js.org](ml5js.org) into `/dist/lib`
 - npm run serve
+
+## COMMIT
+- run `npm version patch` after committing but before pushing

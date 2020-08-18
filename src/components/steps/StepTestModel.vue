@@ -122,6 +122,9 @@ export default {
         this.columns = obj;
       },
     },
+    isTrained: function (value) {
+      this.predictions = [];
+    },
   },
   methods: {
     ...utils,

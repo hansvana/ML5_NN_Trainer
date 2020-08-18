@@ -19,6 +19,11 @@
     <v-btn text>
       <a href="http://cmd.camp">CMD.CAMP</a>
     </v-btn>
+    <v-btn text>
+      <a href="https://github.com/hansvana/ML5_NN_Trainer">
+        <img src="img/github.svg" />
+      </a>
+    </v-btn>
   </v-app-bar>
 </template>
 
@@ -54,6 +59,10 @@ $avans-color: rgb(220, 0, 70);
       height: 60px;
       vertical-align: bottom;
     }
+  }
+
+  button img {
+    height: 2em
   }
 }
 </style>

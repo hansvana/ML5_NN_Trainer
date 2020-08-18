@@ -39,7 +39,7 @@ export default {
         maintainAspectRatio: false,
         legend: { display: false },
         scales: {
-          yAxes: [{ display: true }],
+          yAxes: [{ display: true, ticks: { beginAtZero: true } }],
           xAxes: [{ display: true }],
         },
       },

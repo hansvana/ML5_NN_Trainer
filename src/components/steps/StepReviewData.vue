@@ -36,11 +36,11 @@
       </v-col>
       <v-col cols="12" sm="9">
         <v-container>
-          <v-layout justify-center>
+          <v-layout justify-center class="chart-layout">
             <bubble-chart v-for="(itm, n) in uniqueGroupValues"
               :key="'chart-'+n"
               :chartData="chartData[itm]"
-              :options="chartOptions"
+              :options="{ ...chartOptions, title: { display: true, text: itm } }"
               :styles="uniqueGroupValues.length > 1 ? {'width' : '50%'} : {'width' : '100%'}"
               class="chart-container"
             >
@@ -70,6 +70,7 @@ export default {
         responsive: true,
         maintainAspectRatio: true,
         legend: { display: false },
+        title: { display: true },
         scales: {
           yAxes: [{ type: 'linear' }],
           xAxes: [{ type: 'linear' }],
@@ -147,7 +148,7 @@ export default {
         datasets[group] = {
           datasets: [],
         };
-        if (this.colorBy)
+        if (this.colorBy && this.uniqueColorValues !== null)
           this.uniqueColorValues.forEach((color, n) => {
             const filteredArray =
               groupData.filter(d => {
@@ -158,11 +159,12 @@ export default {
               this.createDataset(
                 filteredArray,
                 n / this.uniqueColorValues.length,
+                group,
               ),
             );
           });
         else
-          datasets[group].datasets.push(this.createDataset(groupData));
+          datasets[group].datasets.push(this.createDataset(groupData, Math.random(), group));
       });
 
       return datasets;
@@ -176,8 +178,9 @@ export default {
       this.yAxis = null;
       this.rSize = null;
     },
-    createDataset (arr, index = Math.random()) {
+    createDataset (arr, index, label) {
       // generates a dataset based on input array for a chart (or color group for a chart)
+      console.log(label);
       const set = arr.map((d, i) => {
         const x = parseFloat(d[this.xAxis]) || 0;
         const y = parseFloat(d[this.yAxis]) || 0;
@@ -190,6 +193,7 @@ export default {
       return {
         data: set,
         backgroundColor: `hsla(${360 * index}, 50%, 50%, 0.6)`,
+        title: 'foo',
       };
     },
   },
@@ -199,5 +203,9 @@ export default {
 <style>
 .chart-container {
   position: relative;
+}
+
+.chart-layout {
+  flex-wrap: wrap;
 }
 </style>

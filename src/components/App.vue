@@ -54,7 +54,7 @@ export default {
 
   computed: {
     errors: function () {
-      return this.$root.errors.join('<br>');
+      return this.$root.errors.slice(0, 5).join('<br>');
     },
     hasErrors: function () {
       return this.$root.errors.length > 0;

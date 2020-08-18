@@ -99,10 +99,19 @@ export default class NeuralNetwork {
         // Note: For classification tasks, the output feature should remain a string
         // https://github.com/ml5js/ml5-library/issues/973
         if (
-          col.datatype === 'number' &&
+          (col.datatype === 'number' || col.datatype === 'boolean') &&
           !(task === 'classification' && col.usage === 'output')
         )
           value = isNaN(value) ? value : parseFloat(value);
+        // Because of a bug with ml5.js, we convert binary output features in classification
+        // to 'true' and 'false'
+        // https://github.com/ml5js/ml5-library/issues/973
+        if (
+          col.datatype === 'boolean' &&
+          task === 'classification' &&
+          col.usage === 'output'
+        )
+          value = value === '1' ? 'true' : 'false';
 
         if (col.usage === 'input')
           input[col.name] = value;
@@ -116,15 +125,21 @@ export default class NeuralNetwork {
   }
 
   /**
-   * Iterates through all data, if isNaN is true on any value it assumes that feature has
+   * Iterates through all data, if all values are either 0 or 1 it assumes a datatype of "boolean"
+   * otherwise if isNaN is true on any value it assumes that feature has
    * a datatype of "string", else "number"
    * @param dataset 2D array of data
    * @param columns array of features
-   * @returns columns with property dataset set to "string" or "number"
+   * @returns columns with property dataset set to "boolean", "string" or "number"
    */
   detectColumnsDatatype (data, columns) {
     columns.forEach(column => {
-      column.datatype = data.some(row => isNaN(row[column.name])) ? 'string' : 'number';
+      if (data.every(row => row[column.name] === '1' || row[column.name] === '0'))
+        column.datatype = 'boolean';
+      else if (data.some(row => isNaN(row[column.name])))
+        column.datatype = 'string';
+      else
+        column.datatype = 'number';
     });
     return columns;
   }
@@ -179,7 +194,6 @@ export default class NeuralNetwork {
       if (this.getInputFeatures()[key].dtype === 'string') {
         // Handle strings
         const legend = Object.keys(this.getInputFeatures()[key].legend);
-        console.log(legend);
         predictInput[key] =
           inputs[key].value ||
           legend[Math.floor(Math.random() * legend.length)]; // random value from the legend
@@ -209,8 +223,6 @@ export default class NeuralNetwork {
         ));
       }
     });
-
-    console.log(predictInput);
 
     if (this.modelOptions.task === 'classification')
       this.nn.classify(predictInput, (error, result) => {
