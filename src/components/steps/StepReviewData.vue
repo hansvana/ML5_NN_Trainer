@@ -180,7 +180,6 @@ export default {
     },
     createDataset (arr, index, label) {
       // generates a dataset based on input array for a chart (or color group for a chart)
-      console.log(label);
       const set = arr.map((d, i) => {
         const x = parseFloat(d[this.xAxis]) || 0;
         const y = parseFloat(d[this.yAxis]) || 0;

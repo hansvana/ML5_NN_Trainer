@@ -5,7 +5,7 @@
       <v-col cols="12" md="6">
         <p>No data will be uploaded to our servers,
           all the work is happening on your side.</p>
-        <p>The values in your file should be separated by comma's.
+        <p>The values in your file should be separated by commas.
           The first line of your file should contain headers.</p>
         <v-file-input label="Load File" :show-size="true" accept=".csv" @change="fileSelected" />
       </v-col>

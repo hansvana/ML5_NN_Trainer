@@ -95,6 +95,24 @@ export default class NeuralNetwork {
       columns.forEach(col => {
         value = line[col.name];
 
+        // Due to a bug with ml5.js, if the classification output is just numbers,
+        // the prediction is wrong. So we're temporarily fixing by prepending some text
+        // https://github.com/ml5js/ml5-library/issues/1044
+        if (col.datatype === 'number' &&
+          task === 'classification' &&
+          col.usage === 'output'
+        )
+          value = col.name + '-' + value;
+
+        // The same bug will also affect binary output, however here we can more or less safely
+        // convert to 'true' and 'false'
+        if (
+          col.datatype === 'boolean' &&
+          task === 'classification' &&
+          col.usage === 'output'
+        )
+          value = value === '1' ? 'true' : 'false';
+
         // Perform data conversion to number if possible
         // Note: For classification tasks, the output feature should remain a string
         // https://github.com/ml5js/ml5-library/issues/973
@@ -103,15 +121,6 @@ export default class NeuralNetwork {
           !(task === 'classification' && col.usage === 'output')
         )
           value = isNaN(value) ? value : parseFloat(value);
-        // Because of a bug with ml5.js, we convert binary output features in classification
-        // to 'true' and 'false'
-        // https://github.com/ml5js/ml5-library/issues/973
-        if (
-          col.datatype === 'boolean' &&
-          task === 'classification' &&
-          col.usage === 'output'
-        )
-          value = value === '1' ? 'true' : 'false';
 
         if (col.usage === 'input')
           input[col.name] = value;

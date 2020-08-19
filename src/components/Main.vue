@@ -99,8 +99,8 @@ export default {
   },
 
   methods: {
-    onError(err) {
-      this.$root.addError(err);
+    onError(msg) {
+      this.$root.addError(msg);
     },
     // Fired when file is loaded
     onDataLoad(data) {
@@ -127,7 +127,22 @@ export default {
           });
           this.dataObj.data.push(obj);
         }
+
+        this.checkForColumnsWithOnlyOneValue();
       }
+    },
+    checkForColumnsWithOnlyOneValue(){
+      const arr = this.dataObj.data;
+      this.dataObj.columns.forEach(column => {
+        if (arr.every( itm => itm[column.name] === arr[0][column.name] )) {
+          this.onError(new Error(
+            `All values for feature <strong>${column.name}</strong> are the same. 
+            This will cause problems while training. The column has been 
+            automatically set to 'ignore'.`
+          ));
+          column.usage = "ignore";
+        }
+      });
     },
     train() {
       this.$root.train(this.dataObj);
