@@ -217,7 +217,10 @@ export default class NeuralNetwork {
             return d.xs[key] !== 0 && d.xs[key] !== 1;
           }))
         )
-          predictInput[key] = Math.floor(Math.random() * 2); // random 0 or 1
+          predictInput[key] =
+            inputs[key].value
+              ? parseInt(inputs[key].value) // the entered value
+              : Math.floor(Math.random() * 2); // random 0 or 1
         else
         // Handle numbers
           predictInput[key] =
@@ -225,7 +228,8 @@ export default class NeuralNetwork {
             _.randomBetween(
               this.getInputFeatures()[key].min,
               this.getInputFeatures()[key].max,
-            ); // random value between min and max
+            );
+        // random value between min and max
       } else {
         callback(new Error(`
           don't know how to handle ${this.getInputFeatures()[key].dtype} ${key}`,

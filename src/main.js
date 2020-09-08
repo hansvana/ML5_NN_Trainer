@@ -80,8 +80,6 @@ new Vue({
           results.push(result);
         });
 
-      console.log(results);
-
       return results;
     },
   },
