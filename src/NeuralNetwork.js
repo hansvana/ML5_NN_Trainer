@@ -98,11 +98,11 @@ export default class NeuralNetwork {
         // Due to a bug with ml5.js, if the classification output is just numbers,
         // the prediction is wrong. So we're temporarily fixing by prepending some text
         // https://github.com/ml5js/ml5-library/issues/1044
-        if (col.datatype === 'number' &&
-          task === 'classification' &&
-          col.usage === 'output'
-        )
-          value = col.name + '-' + value;
+        // if (col.datatype === 'number' &&
+        //   task === 'classification' &&
+        //   col.usage === 'output'
+        // )
+        //   value = col.name + '-' + value;
 
         // The same bug will also affect binary output, however here we can more or less safely
         // convert to 'true' and 'false'
