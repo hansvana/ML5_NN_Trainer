@@ -106,12 +106,12 @@ export default class NeuralNetwork {
 
         // The same bug will also affect binary output, however here we can more or less safely
         // convert to 'true' and 'false'
-        if (
-          col.datatype === 'boolean' &&
-          task === 'classification' &&
-          col.usage === 'output'
-        )
-          value = value === '1' ? 'true' : 'false';
+        // if (
+        //   col.datatype === 'boolean' &&
+        //   task === 'classification' &&
+        //   col.usage === 'output'
+        // )
+        //   value = value === '1' ? 'true' : 'false';
 
         // Perform data conversion to number if possible
         // Note: For classification tasks, the output feature should remain a string
@@ -221,15 +221,26 @@ export default class NeuralNetwork {
             inputs[key].value
               ? parseInt(inputs[key].value) // the entered value
               : Math.floor(Math.random() * 2); // random 0 or 1
-        else
-        // Handle numbers
+        // Check for and handle floats
+        else if (
+          this.getData().some(d => { return !Number.isInteger(d.xs[key]); })
+        )
           predictInput[key] =
-            parseFloat(inputs[key].value) ||
+          parseFloat(
+            inputs[key].value ||
             _.randomBetween(
               this.getInputFeatures()[key].min,
               this.getInputFeatures()[key].max,
-            );
-        // random value between min and max
+            ));// random value between min and max
+        else
+        // Handle integers
+          predictInput[key] =
+          Math.floor(
+            inputs[key].value ||
+            _.randomBetween(
+              this.getInputFeatures()[key].min,
+              this.getInputFeatures()[key].max + 1,
+            ));// random value between min and max
       } else {
         callback(new Error(`
           don't know how to handle ${this.getInputFeatures()[key].dtype} ${key}`,

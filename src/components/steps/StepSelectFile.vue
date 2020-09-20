@@ -28,6 +28,7 @@
             <p>
               {{dataset.columns.length}} features.
               {{dataset.data.length}} entries.
+              Separator: {{separator === ',' ? 'comma' : 'semicolon'}}.
             </p>
             <v-simple-table dense>
               <thead>
@@ -75,6 +76,7 @@ export default {
   },
   data: () => ({
     fileName: 'data.csv',
+    separator: ',',
   }),
   methods: {
     fileSelected (file) {
@@ -102,10 +104,17 @@ export default {
                 new Error('File doesn\'t seem to have have at least 2 lines of text'),
               );
 
+            // // if there are more semicolons than commas in the first line
+            // // we assume semicolon is the separator
+            if (lines[0].split(';').length > lines[0].split(',').length)
+              this.separator = ';';
+            else
+              this.separator = ',';
+
             const cells = [];
             lines.forEach((line, n) => {
               line = utils.sanitize(line);
-              const lineArr = line.split(',').map(val => val.trim());
+              const lineArr = line.split(this.separator).map(val => val.trim());
               // console.log(lineArr);
 
               // check if first line has no unnamed features

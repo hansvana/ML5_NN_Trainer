@@ -1,5 +1,10 @@
 <template>
   <div>
+    <p>
+      In this step we provide some basic visualisation for your data.<br>
+      For a more in-depth visualisation we currently recommend
+      <a href="https://pair-code.github.io/facets/" target="_blank">Facets</a>.
+    </p>
     <v-row no-gutters v-if="hasData">
       <v-col cols="12" sm="3">
         <v-select

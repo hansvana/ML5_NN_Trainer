@@ -3,7 +3,7 @@
 ## INSTALL
 - git clone
 - npm install
-- Download ml5.min.js from [ml5js.org](ml5js.org) into `/dist/lib`
+- Download ml5.min.js from [ml5js.org](ml5js.org) into `/dist/lib`, or build your own
 - npm run serve
 
 ## COMMIT
