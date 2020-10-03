@@ -10,7 +10,7 @@
       ML5.js Neural Network Trainer
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn text :disabled=true>Alpha {{ version }}</v-btn>
+    <v-btn text :disabled=true>Beta {{ version }}</v-btn>
     <v-spacer></v-spacer>
     <v-btn text :disabled=true>Powered by</v-btn>
     <v-btn text>

@@ -8,6 +8,14 @@
         <p>The values in your file should be separated by commas.
           The first line of your file should contain headers.</p>
         <v-file-input label="Load File" :show-size="true" accept=".csv" @change="fileSelected" />
+        <p>In case you don't have a file handy, you can download
+          <a href="https://cmd-breda-avans.github.io/Datasets/csv/zoo3.csv" target="_blank">
+            this one
+          </a>
+          <a href="https://www.kaggle.com/uciml/zoo-animal-classification">
+            <sub>(source)</sub>
+          </a>
+        </p>
       </v-col>
 
       <v-col cols="12" md="6">
